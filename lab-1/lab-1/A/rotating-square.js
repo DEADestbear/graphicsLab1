@@ -75,14 +75,26 @@ window.onload = async function()
     // A5: MODIFY BELOW
 
     // vertex indices for line drawing
-    indices = [0, 1];
-
+    indices = [ 
+        0,1,
+        1,3,
+        3,2,
+        2,0,
+        0,3,
+        1,2
+        ];
     // RGBA values
     colours = [
         [1.0,  0.0,  0.0,  1.0], // red
         [0.0,  1.0,  0.0,  1.0], // green
         [0.0,  0.0,  1.0,  1.0], // blue
-        [1.0,  1.0,  1.0,  1.0]  // white
+        [1.0,  1.0,  1.0,  1.0],  // white
+        [0.0,  0.0,  0.0,  1.0], // black
+        [0.0,  0.0,  0.0,  1.0], // black
+        [0.0,  0.0,  0.0,  1.0], // black
+        [0.0,  0.0,  0.0,  1.0], // black
+        [0.0,  0.0,  0.0,  1.0], // black
+        [0.0,  0.0,  0.0,  1.0] // black
     ];
 
     
@@ -140,11 +152,21 @@ function render() {
 
     // A4 & A5: MODIFY BELOW
 
+    // connect vertex_colour attribute in shader to colour_buf
+    gl.vertexAttribPointer(colour_loc, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(colour_loc)
+
     // draw triangle strip
     let num_strip_vertices = vertices.length;
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, num_strip_vertices);
 
     // A6: ADD CODE HERE
+    let black_offset = vertices.length * 4 * 4;
+
+    gl.vertexAttribPointer(colour_loc, 4, gl.FLOAT, false, 0, black_offset);
+    gl.enableVertexAttribArray(colour_loc);
+    let num_line_vertices = indices.length;
+    gl.drawElements(gl.LINES, num_line_vertices, gl.UNSIGNED_SHORT, 0);
 
     // check if screen capture requested
     capture_canvas_check();

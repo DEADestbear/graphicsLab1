@@ -6,10 +6,12 @@ vec4 yellow = vec4(red + green, 1.0);
 
 // A4: ADD CODE HERE
 
+varying lowp vec4 colour_var;
+
 void main()
 {
     // A2 & A4: MODIFY BELOW
 
-    gl_FragColor = yellow;
+    gl_FragColor = colour_var;
 }
 

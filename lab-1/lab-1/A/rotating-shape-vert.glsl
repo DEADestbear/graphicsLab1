@@ -3,6 +3,8 @@ uniform float theta;
 attribute vec4 vertex;
 
 // A4: ADD CODE HERE
+attribute vec4 colour;
+varying lowp vec4 colour_var;
 
 void main()
 {
@@ -20,6 +22,9 @@ void main()
     gl_Position.w = 1.0;
 
     // A4: ADD CODE HERE
+
+    colour_var = colour;
+
 
 }
 
