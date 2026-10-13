@@ -1,8 +1,8 @@
 'use strict';
 // HTML5 canvas, WebGL context, and shader filenames
 var canvas, gl;
-const vs_file = './rotating-shape-vert.glsl';
-const fs_file = './rotating-shape-frag.glsl';
+const vs_file = '../A/rotating-shape-vert.glsl';
+const fs_file = '../A/rotating-shape-frag.glsl';
 
 // rotation angle, and location in shader
 var theta = 0.0;
@@ -41,10 +41,17 @@ window.onload = async function()
     // --- geometry and colour data ---
 
     vertices = [];
-    // B1: ADD CODE HERE
-
     indices = [];
     // B1: ADD CODE HERE
+    const num_vertices = 6; 
+    for (let i = 0; i < num_vertices; i++) {
+        let angle = 2 * Math.PI * i / num_vertices; // makes a circle and divides it into 6 equal parts placing the vertices of the hexagon
+        vertices.push([Math.cos(angle), Math.sin(angle)]);
+        indices.push(i);
+    }
+    vertices.push([0.0, 0.0]); // center vertex
+    indices.push(0); // center vertex index
+
 
     // RGBA values for hexagon
     // B2: MODIFY THE COLOURS
