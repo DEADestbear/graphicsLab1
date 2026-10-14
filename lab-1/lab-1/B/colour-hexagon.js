@@ -43,26 +43,36 @@ window.onload = async function()
     vertices = [];
     indices = [];
     // B1: ADD CODE HERE
+
+
     const num_vertices = 6; 
+    indices.push(num_vertices); // center vertex index
+
     for (let i = 0; i < num_vertices; i++) {
         let angle = 2 * Math.PI * i / num_vertices; // makes a circle and divides it into 6 equal parts placing the vertices of the hexagon
         vertices.push([Math.cos(angle), Math.sin(angle)]);
         indices.push(i);
     }
+
     vertices.push([0.0, 0.0]); // center vertex
     indices.push(0); // center vertex index
 
 
+    
+
+    console.log('Vertices: ' + vertices);
+    console.log('Indices: ' + indices);
+
     // RGBA values for hexagon
     // B2: MODIFY THE COLOURS
     colours = [
-        [0.0, 0.0, 0.0, 1.0],
-        [0.0, 0.0, 0.0, 1.0],
-        [0.0, 0.0, 0.0, 1.0],
-        [0.0, 0.0, 0.0, 1.0],
-        [0.0, 0.0, 0.0, 1.0],
-        [0.0, 0.0, 0.0, 1.0],
-        [0.0, 0.0, 0.0, 1.0]
+        [1.0, 0.0, 0.0, 1.0], // RED
+        [1.0, 1.0, 0.0, 1.0], // YELLOW
+        [0.0, 1.0, 0.0, 1.0], // GREEN
+        [0.0, 1.0, 1.0, 1.0], // CYAN
+        [1.0, 0.0, 1.0, 1.0], // BLUE
+        [1.0, 0.0, 1.0, 1.0], // MAGENTA
+        [1.0, 1.0, 1.0, 1.0] //WHITE
     ];
 
     // --- geometry and colour setup ---
@@ -116,7 +126,7 @@ function render() {
     let num_line_vertices = indices.length;
     
     // B2: MODIFY CODE HERE
-    gl.drawElements(gl.LINE_STRIP, num_line_vertices, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.TRIANGLE_FAN, num_line_vertices, gl.UNSIGNED_SHORT, 0);
 
     // check if screen capture requested
     capture_canvas_check();
