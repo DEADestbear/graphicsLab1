@@ -3,7 +3,7 @@
 var canvas, gl;
 const vs_file = './rotating-shape-vert.glsl';
 const fs_file = './rotating-shape-frag.glsl';
-
+const shared_file = '../shared/graphics.js';
 // rotation angle, and location in shader
 
 // buffers and attributes
@@ -12,20 +12,16 @@ var vertices, indices, colours, vertices_colours;
 // C1,C2: MODIFY HERE
 var num_vertices = 1000;
 
-function rgba_wheel(t)
-{
-   // generate a crude colour wheel, for t in [0,2pi]
 
-   // 120 degrees to separate R-G-B around the wheel
-   let u = 2*Math.PI/3;
-
-   // cosine waves offset by 120 degrees, and mapped to values in [0,1]
-   return [ (1 + Math.cos(t))/2, 
-            (1 + Math.cos(t-u))/2, 
-            (1 + Math.cos(t+u))/2, 1];
-}
 
 // C5: ADD FUNCTION HERE
+
+function squircle(t,n){
+   let x = Math.sign(Math.cos(t)) * Math.abs(Math.cos(t))**(2/n);
+   let y = Math.sign(Math.sin(t)) * Math.abs(Math.sin(t))**(2/n);
+   return [x,y];
+}
+
 
 // intialization --- called once per page load
 window.onload = async function()
@@ -58,18 +54,19 @@ window.onload = async function()
    // data for attributes
    vertices = [];
    colours = [];
-
+   var scale = 0.99;
    // C1, C3, C4, C5: ADD CODE HERE
 
-   colours.push([1,0,0,1]) // red
+   
 
    for (let i = 0; i < num_vertices; i++) {
-      let angle = 2 * Math.PI * i / num_vertices; // makes a circle and divides it
-      vertices.push([0.99*Math.cos(angle),0.99*Math.sin(angle)]);
-      colours.push([1,0,0,1])
+      let angle = 2* 16 * Math.PI * i / num_vertices; // makes a circle and divides it
+      vertices.push([scale*squircle(angle, 4)[0], scale*squircle(angle, 4)[1]]);
+      colours.push(rgba_wheel(angle));
+      scale -= 0.001; // scale down for spiral effect
    }
 
-   vertices.push(vertices[0]); // close the loop by duplicating the first vertex
+   //vertices.push(vertices[0]); // close the loop by duplicating the first vertex
    colours.push([0,0,0,1]) // center vertex colour
    
 
@@ -113,7 +110,7 @@ function render() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // draw strip including the duplicated last vertex 
-    gl.drawArrays(gl.LINE_STRIP, 0, num_vertices+1);
+    gl.drawArrays(gl.LINE_STRIP, 0, num_vertices);
 
     // check if screen capture requested
     capture_canvas_check();
