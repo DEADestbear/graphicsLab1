@@ -10,7 +10,7 @@ const fs_file = './rotating-shape-frag.glsl';
 var vertices, indices, colours, vertices_colours;
 
 // C1,C2: MODIFY HERE
-var num_vertices = 6;
+var num_vertices = 1000;
 
 function rgba_wheel(t)
 {
@@ -53,42 +53,55 @@ window.onload = async function()
    let program = webgl_make_program(gl, vs, fs);
    gl.useProgram(program);
 
-    // --- geometry and colour data ---
+   // --- geometry and colour data ---
 
-    // data for attributes
-    vertices = [];
-    colours = [];
+   // data for attributes
+   vertices = [];
+   colours = [];
 
-    // C1, C3, C4, C5: ADD CODE HERE
+   // C1, C3, C4, C5: ADD CODE HERE
 
-    // D1 (OPTIONAL): MODIFY FOLLOWING CODE
+   colours.push([1,0,0,1]) // red
 
-    // --- geometry setup ---
+   for (let i = 0; i < num_vertices; i++) {
+      let angle = 2 * Math.PI * i / num_vertices; // makes a circle and divides it
+      vertices.push([0.99*Math.cos(angle),0.99*Math.sin(angle)]);
+      colours.push([1,0,0,1])
+   }
 
-    // create and fill vertex buffer
-    let vertex_buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buf);
-    gl.bufferData(gl.ARRAY_BUFFER, mat_float_flat(vertices), gl.STATIC_DRAW);
+   vertices.push(vertices[0]); // close the loop by duplicating the first vertex
+   colours.push([0,0,0,1]) // center vertex colour
+   
 
-    // connect vertex variable in shader to vertex_buf (the current ARRAY_BUFFER)
-    let vertex_loc = gl.getAttribLocation(program, 'vertex');
-    gl.vertexAttribPointer(vertex_loc, 2, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vertex_loc);
 
-    // --- colour setup ---
+   // D1 (OPTIONAL): MODIFY FOLLOWING CODE
 
-    // create and fill vertex colour buffer
-    let colour_buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, colour_buf);
-    gl.bufferData(gl.ARRAY_BUFFER, mat_float_flat(colours), gl.STATIC_DRAW);
+   // --- geometry setup ---
 
-    // connect colour variable in shader to colour_buf (the current ARRAY_BUFFER)
-    let colour_loc = gl.getAttribLocation(program, 'colour');
-    gl.vertexAttribPointer(colour_loc, 4, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(colour_loc);
+   // create and fill vertex buffer
+   let vertex_buf = gl.createBuffer();
+   gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buf);
+   gl.bufferData(gl.ARRAY_BUFFER, mat_float_flat(vertices), gl.STATIC_DRAW);
 
-    // start drawing
-    render();
+   // connect vertex variable in shader to vertex_buf (the current ARRAY_BUFFER)
+   let vertex_loc = gl.getAttribLocation(program, 'vertex');
+   gl.vertexAttribPointer(vertex_loc, 2, gl.FLOAT, false, 0, 0);
+   gl.enableVertexAttribArray(vertex_loc);
+
+   // --- colour setup ---
+
+   // create and fill vertex colour buffer
+   let colour_buf = gl.createBuffer();
+   gl.bindBuffer(gl.ARRAY_BUFFER, colour_buf);
+   gl.bufferData(gl.ARRAY_BUFFER, mat_float_flat(colours), gl.STATIC_DRAW);
+
+   // connect colour variable in shader to colour_buf (the current ARRAY_BUFFER)
+   let colour_loc = gl.getAttribLocation(program, 'colour');
+   gl.vertexAttribPointer(colour_loc, 4, gl.FLOAT, false, 0, 0);
+   gl.enableVertexAttribArray(colour_loc);
+
+   // start drawing
+   render();
 };
 
 
